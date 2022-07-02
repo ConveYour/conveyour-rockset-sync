@@ -1,0 +1,1 @@
+select {{select}} from {{ws}}.{{table}}
