@@ -26,7 +26,7 @@ def getQuery( file, vars = {}):
   vars['ws'] = ROCKSET_WORKSPACE
   text = Path("./sql/" + file + ".sql").read_text()
   for key in vars:
-      text = text.replace('{{' + key + '}}', vars[key])
+      text = text.replace('{{' + key + '}}', str(vars[key]) )
   return text
 
 # exampmle of getting just rencently updated contacts using the updated_at timestamp
@@ -51,15 +51,15 @@ def getTableSummaries():
   query = "\nunion all\n".join(query)
   printCursor(query)
 
-
-getTableSummaries()
-
+# getTableSummaries()
+# getRecentlyUpdatedContacts()
 
 ## Get triggers
 # query = getQuery('all_table_records', {
 #   'table' : 'triggers t',
 #   'select' : '_id, t.d.name'
 # })
+# printCursor(query)
 
 # query = getQuery('all_table_records', {
 #   'table' : 'campaigns cmp',
@@ -75,6 +75,16 @@ getTableSummaries()
 #   'table' : 'lesson_items li',
 #   'select' : '_id, li.d.type'
 # })
+
+# uses rockset date functions to create relative timestamp
+query = getQuery('get_table_updated_since', {
+  'table' : 'events',
+  'daysAgoStart' : 2,
+  'daysAgoEnd' : 1,
+  'limit' : 1000
+})
+
+printCursor(query)
 
 
 
